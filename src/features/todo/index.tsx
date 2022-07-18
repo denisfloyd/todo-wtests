@@ -1,4 +1,5 @@
-import { FormEvent, useRef, useState } from "react";
+import axios from "axios";
+import { useRef, useState } from "react";
 
 import { Container, List, TodoElement, TodoInput, Button } from "./styles";
 
@@ -10,19 +11,49 @@ const Todos: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  const handleAddTodo = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // check if task is empty or has already been added
+  // check if task is empty or has already been added
+  const checkTodoTask = () => {
     if (inputRef.current && inputRef.current.value.trim().length > 0) {
       const taskIsAlreadyExists = todos.some(
         (task) => task.task === inputRef.current?.value
       );
 
-      if (!taskIsAlreadyExists) {
-        const task = inputRef.current.value.trim();
+      return !taskIsAlreadyExists;
+    }
+
+    return false;
+  };
+
+  const handleAddTodo = (e: any) => {
+    e.preventDefault();
+
+    if (checkTodoTask()) {
+      const task = inputRef.current?.value.trim() as string;
+      setTodos([...todos, { task }]);
+      inputRef.current!.value = "";
+    }
+  };
+
+  const handleAsyncAddTodo = async (e: any) => {
+    e.preventDefault();
+
+    if (checkTodoTask()) {
+      const task = inputRef.current?.value.trim() as string;
+
+      const response = await axios.post(
+        "https://jsonplaceholder.typicode.com/todos",
+        {
+          userId: 10,
+          title: task,
+          completed: false,
+        }
+      );
+
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      if (response.status === 201) {
         setTodos([...todos, { task }]);
-        inputRef.current.value = "";
+        inputRef.current!.value = "";
       }
     }
   };
@@ -35,12 +66,16 @@ const Todos: React.FC = () => {
     <Container>
       <h1>Todo List</h1>
 
-      <form onSubmit={handleAddTodo}>
-        <TodoInput id="input-todo" ref={inputRef} />
-        <Button type="submit" data-testid="add-button" addBackground>
+      <form>
+        <TodoInput data-testid="input-todo" ref={inputRef} />
+        <Button onClick={handleAddTodo} data-testid="add-button" addBackground>
           +
         </Button>
-        <Button type="submit" data-testid="add-button-async" addBackground>
+        <Button
+          onClick={handleAsyncAddTodo}
+          data-testid="add-button-async"
+          addBackground
+        >
           + Async
         </Button>
       </form>
