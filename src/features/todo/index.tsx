@@ -11,51 +11,52 @@ const Todos: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<Todo[]>([]);
 
-  // check if task is empty or has already been added
-  const checkTodoTask = () => {
+  const validationToAddTodoHOC = (todoAddFunction: Function) => {
     if (inputRef.current && inputRef.current.value.trim().length > 0) {
       const taskIsAlreadyExists = todos.some(
         (task) => task.task === inputRef.current?.value
       );
 
-      return !taskIsAlreadyExists;
+      !taskIsAlreadyExists && todoAddFunction();
     }
 
-    return false;
+    alert("Task is empty or already exists");
   };
 
   const handleAddTodo = (e: any) => {
     e.preventDefault();
 
-    if (checkTodoTask()) {
+    validationToAddTodoHOC(() => {
       const task = inputRef.current?.value.trim() as string;
       setTodos([...todos, { task }]);
       inputRef.current!.value = "";
-    }
+    });
   };
 
   const handleAsyncAddTodo = async (e: any) => {
     e.preventDefault();
 
-    if (checkTodoTask()) {
+    validationToAddTodoHOC(async () => {
       const task = inputRef.current?.value.trim() as string;
 
-      const response = await axios.post(
-        "https://jsonplaceholder.typicode.com/todos",
-        {
-          userId: 10,
-          title: task,
-          completed: false,
-        }
-      );
+      try {
+        await axios.post(
+          "https://jsonplaceholder.typicode.com/todos",
+          {
+            userId: 10,
+            title: task,
+            completed: false,
+          }
+        );
 
-      await new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
-      if (response.status === 201) {
         setTodos([...todos, { task }]);
         inputRef.current!.value = "";
+      } catch {
+        alert("Server is not available");
       }
-    }
+    });
   };
 
   const handleRemoveTodo = (task: string) => {
