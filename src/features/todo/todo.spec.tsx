@@ -8,11 +8,16 @@ const apiMock = new AxiosMock(axios, {
   delayResponse: 300,
 });
 
-describe("Todo feature", () => {
-  describe("Todo component", () => {});
+const alertMock = jest.fn();
 
+describe("Todo feature", () => {
   beforeAll(() => {
     apiMock.onPost().reply(201);
+    window.alert = alertMock;
+  });
+
+  beforeEach(() => {
+    alertMock.mockClear();
   });
 
   it("should render correctly", () => {
@@ -43,6 +48,7 @@ describe("Todo feature", () => {
     addTodoTask(inputTodo, addButton, " ");
 
     expect(queryAllByRole("listitem").length).toBe(0);
+    expect(alertMock).toHaveBeenCalledWith("Task is empty or already exists");
   });
 
   it("should not be able to add a task that already exists", () => {
@@ -55,26 +61,36 @@ describe("Todo feature", () => {
     addTodoTask(inputTodo, addButton, "Test Task");
 
     expect(getAllByRole("listitem").length).toBe(1);
+    expect(alertMock).toHaveBeenCalledWith("Task is empty or already exists");
   });
 
   it("should add an asyncronous todo task", async () => {
-    const { findByText, getByTestId, getByText } = render(<Todos />);
+    const { findByText, getByTestId } = render(<Todos />);
 
     const inputTodo = getByTestId("input-todo");
     const addButtonAsync = getByTestId("add-button-async");
 
     addTodoTask(inputTodo, addButtonAsync, "Test task");
 
-    // await waitFor(
-    //   () => {
-    //     expect(getByText("Test task")).toBeInTheDocument();
-    //   },
-    //   {
-    //     timeout: 500,
-    //   }
-    // );
-
     expect(await findByText("Test task")).toBeInTheDocument();
+  });
+
+  it("should not add async todo task when server responded with an error", async () => {
+    apiMock.onPost().reply(500);
+
+    const { queryByText, getByTestId, queryAllByRole } = render(<Todos />);
+
+    const inputTodo = getByTestId("input-todo");
+    const addButtonAsync = getByTestId("add-button-async");
+
+    addTodoTask(inputTodo, addButtonAsync, "Test task 2");
+
+    await waitFor(() => {
+      expect(alertMock).toHaveBeenCalledWith("Server is not available");
+    });
+    
+    expect(queryAllByRole("listitem").length).toBe(0);
+    expect(queryByText("Test task 2")).toBeNull();
   });
 
   it("should be able to remove a todo task", async () => {
