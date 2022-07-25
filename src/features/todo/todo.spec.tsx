@@ -48,7 +48,7 @@ describe("Todo feature", () => {
     addTodoTask(inputTodo, addButton, " ");
 
     expect(queryAllByRole("listitem").length).toBe(0);
-    expect(alertMock).toHaveBeenCalledWith("Task is empty or already exists");
+    expect(alertMock).toHaveBeenCalledWith("Task is empty");
   });
 
   it("should not be able to add a task that already exists", () => {
@@ -61,7 +61,8 @@ describe("Todo feature", () => {
     addTodoTask(inputTodo, addButton, "Test Task");
 
     expect(getAllByRole("listitem").length).toBe(1);
-    expect(alertMock).toHaveBeenCalledWith("Task is empty or already exists");
+    expect(alertMock).toHaveBeenCalledTimes(1);
+    expect(alertMock).toHaveBeenCalledWith("Task is already exists");
   });
 
   it("should add an asyncronous todo task", async () => {
