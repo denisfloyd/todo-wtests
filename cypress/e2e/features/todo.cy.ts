@@ -61,7 +61,37 @@ describe("todo spec feature", () => {
     });
   });
 
-  // it.todo("should not add async todo task when server responded with an error");
+  it("should not add async todo task when server responded with an error", () => {
+    cy.intercept(
+      {
+        method: "POST", // Route all GET requests
+        url: "/todos", // that have a URL that matches '/todos'
+      },
+      { statusCode: 500 } // and force the status code to 500
+    ).as("postTodo"); // and assign an alias
 
-  // it.todo("should be able to remove a todo task");
+    cy.visit("/");
+    cy.get("input").type("Todo task 1");
+    cy.get('[data-testid="add-button-async"]').click();
+
+    cy.wait("@postTodo");
+
+    cy.get("li").should("have.length", 0);
+    cy.on("window:alert", (alertMessage) => {
+      expect(alertMessage).to.contains("Server is not available");
+    });
+  });
+
+  it("should be able to remove a todo task", () => {
+    const tasks = ["Todo task 1"];
+
+    cy.visit("/");
+    cy.get("input").type(tasks[0]);
+    cy.get('[data-testid="add-button"]').click();
+
+    cy.get("li").should("have.length", 1);
+    cy.get(`[data-testid="delete-${tasks[0]}"]`).click();
+
+    cy.get("li").should("have.length", 0);
+  });
 });
