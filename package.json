@@ -9,7 +9,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:verbose": "jest --verbose",
-    "test:coverage": "jest --verbose --coverage --config jest.config.js"
+    "test:coverage": "jest --verbose --coverage --config jest.config.js",
+    "e2e": "cypress run --headless -q",
+    "e2e:open": "cypress open"
   },
   "dependencies": {
     "axios": "^0.27.2",
