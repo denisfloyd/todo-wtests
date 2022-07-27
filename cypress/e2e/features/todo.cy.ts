@@ -64,7 +64,7 @@ describe("todo spec feature", () => {
   it("should not add async todo task when server responded with an error", () => {
     cy.intercept(
       {
-        method: "POST", // Route all GET requests
+        method: "POST", // Route all POST requests
         url: "/todos", // that have a URL that matches '/todos'
       },
       { statusCode: 500 } // and force the status code to 500
