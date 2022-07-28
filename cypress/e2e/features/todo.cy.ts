@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe("todo spec feature", () => {
   it("render correctly", () => {
     cy.visit("/");
