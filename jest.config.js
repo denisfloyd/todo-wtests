@@ -1,15 +1,13 @@
 module.exports = {
-  setupFilesAfterEnv: [
-    "<rootDir>/src/tests/setupTests.ts"
-  ],
+  setupFilesAfterEnv: ["<rootDir>/src/tests/setupTests.ts"],
   transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest"
+    "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
   },
   resetMocks: false,
   moduleNameMapper: {
-    '^.+\\.(css|sass|scss)$': 'identity-obj-proxy',
+    "^.+\\.(css|sass|scss)$": "identity-obj-proxy",
   },
-  testEnvironment: 'jsdom',
+  testEnvironment: "jsdom",
   collectCoverage: false,
   collectCoverageFrom: [
     "<rootDir>/src/**/*.{tsx,ts}",
@@ -19,9 +17,7 @@ module.exports = {
     "!<rootDir>/src/main.tsx",
     "!<rootDir>/src/tests/*.tsx",
   ],
-  coveragePathIgnorePatterns: [
-    "node_modules",
-  ],
+  coveragePathIgnorePatterns: ["node_modules"],
   coverageDirectory: "<rootDir>/coverage/",
-  coverageReporters: ['lcov', 'json'],
-}
+  coverageReporters: ["lcov", "json", "text"],
+};
