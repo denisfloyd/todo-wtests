@@ -51,6 +51,10 @@ const Todos: React.FC = () => {
     });
   };
 
+  const handleRemoveTodo = (task: string) => {
+    setTodos(todos.filter((todo) => todo !== task));
+  };
+
   return (
     <Container id="container">
       <h1>Todo List</h1>
@@ -61,7 +65,7 @@ const Todos: React.FC = () => {
         ref={inputRef}
       />
 
-      <TodoList todos={todos} />
+      <TodoList todos={todos} handleRemoveTodo={handleRemoveTodo} />
     </Container>
   );
 };

@@ -116,7 +116,21 @@ describe("Todo feature", () => {
     expect(queryByText("Test task 2")).toBeNull();
   });
 
-  it.todo("should be able to remove a todo task");
+  it("should be able to remove a todo task", () => {
+    const { getByTestId, queryByText, getByText } = render(<Todos />);
+
+    const inputTodo = getByTestId("input-todo");
+    const addButton = getByTestId("add-button");
+
+    addTodoTask(inputTodo, addButton, "Test task");
+
+    expect(getByText("Test task")).toBeInTheDocument();
+
+    const removeButton = getByTestId("delete-Test task");
+    fireEvent.click(removeButton);
+
+    expect(queryByText("Test task")).toBeNull();
+  });
 });
 
 const addTodoTask = (
