@@ -17,6 +17,7 @@ const ApiMock = jest.requireMock("./api");
 */
 
 /* 
+  jest.mock("./api");
   const ApiMock = jest.requireMock('./api');
   const postTodoSpy = jest.spyOn(ApiMock, 'postTodo').mockResolveValue(...)
   expect(postTodoSpy).toHaveBeenCalled();
@@ -29,7 +30,7 @@ const ApiMock = jest.requireMock("./api");
   cosnt postTodoMock = jest.mocked(postTodo).mockResolvedValue("" as any); 
   or const postTodoMock = (postTodo as jest.Mock).mockRejectedValue({});
 
-  expect(postTodoSpy).toHaveBeenCalled();
+  expect(postTodoMock).toHaveBeenCalled();
 */
 
 describe("Todo feature", () => {
