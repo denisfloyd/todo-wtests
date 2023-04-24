@@ -20,4 +20,5 @@ module.exports = {
   coveragePathIgnorePatterns: ["node_modules"],
   coverageDirectory: "<rootDir>/coverage/",
   coverageReporters: ["lcov", "json", "text"],
+  testPathIgnorePatterns: ["vitest"],
 };
