@@ -30,6 +30,7 @@ This project was made using the follow technologies:
 * [jest](https://jestjs.io/)
 * [testing-library](https://testing-library.com/)
 * [cypress](https://www.cypress.io/)
+* [vitest](https://vitest.dev/)
 
 # :construction_worker: How to run
 ```bash
@@ -72,7 +73,9 @@ $ npm run test # to run test with vitest
 $ npm run test:coverage
 
 # Run e2e tests
-$ npm run e2e
+$ npm run test:e2e
+or
+$ npm run test:e2e:headless # headless mode
 ```
 
 # :bug: Issues
