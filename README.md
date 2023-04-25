@@ -64,19 +64,15 @@ Go to http://localhost:3000/ to see the result.
 ```bash
 # Install dependencies if you didn't
 # Run tests
-$ npm run test
-or
-$ yarn test
+$ npm run test:jest
+or 
+$ npm run test # to run test with vitest
 
 # Run test coverage
 $ npm run test:coverage
-or
-$ yarn test:coverage
 
 # Run e2e tests
 $ npm run e2e
-or
-$ yarn e2e
 ```
 
 # :bug: Issues
